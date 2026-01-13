@@ -1,42 +1,93 @@
-# Flutter Todo App (BLoC + Offline Support)
+# Flutter Todo App
+
+A Flutter Todo application demonstrating clean architecture, BLoC state management, offline-first behavior, and a modern dark UI inspired by Gmail.
+
+---
 
 ## Features
-- Task list with add, delete, complete
-- Search and pull-to-refresh
-- Offline caching with optimistic updates
-- Sync with server when online
-- BLoC architecture
-- Mock authentication
+
+- Add, delete and toggle tasks
+- Offline support with optimistic updates
+- Automatic sync when internet is restored
+- Dark theme with rounded card UI
+- Leading avatar with task initial
+- Swipe to delete tasks
+- Status indicator badge for completed / pending tasks
+- Pending sync indicator for offline changes
+- Pull to refresh
+- Mock login with persistent session
+- Logout with snackbar feedback
+- Clean layered architecture
+- Unit tests for core logic
+
+---
 
 ## Setup Instructions
 1. Clone repository
 2. Run `flutter pub get`
 3. Run `flutter run`
 
+---
+
 ## Architecture
-The app follows a layered architecture:
-- Presentation: UI and BLoC
-- Domain: Business logic and entities
-- Data: API and local cache
 
-BLoC handles user actions via events and emits states consumed by the UI.
+The project follows a layered architecture with clear separation of concerns:
 
-## Offline Support
-- Tasks are cached locally using Hive.
-- When offline, operations are stored locally and marked for sync.
-- When connectivity is restored, pending changes are synced with the API.
+### Presentation (UI + BLoC)
+Responsible for user interface and state management. Widgets dispatch events to BLoC and rebuild based on emitted states.
 
-## API Integration
-Uses JSONPlaceholder:
+### Domain (Entities + Repositories)
+Contains business entities and abstract contracts. This layer is independent of frameworks and external services.
+
+### Data (Remote API + Local cache)
+Implements the repository contracts using concrete data sources such as REST APIs and local storage.
+
+### Core (Infrastructure services)
+Provides cross-cutting technical services such as networking, connectivity monitoring, persistence, and authentication helpers.
+
+---
+
+## Offline Strategy
+
+- All tasks are cached locally using Hive.
+- When offline, tasks are stored locally with a `pendingSync` flag.
+- When connectivity is restored, pending tasks are synced automatically.
+- Local and remote tasks are merged to prevent data loss.
+
+---
+
+## API
+
+Uses the public JSONPlaceholder API:
+
 - GET /todos
 - POST /todos
 - PATCH /todos/{id}
 - DELETE /todos/{id}
 
-## Assumptions
-- Authentication is mocked with hardcoded credentials.
-- JSONPlaceholder does not persist writes; behavior is simulated.
+Note: JSONPlaceholder does not persist writes. Local storage ensures continuity.
 
-## Challenges
-- JSONPlaceholder not persisting data → handled by local cache.
-- Sync conflicts → resolved by last-write-wins strategy.
+---
+
+## Authentication
+
+Mock login credentials:
+
+- Username: admin
+- Password: 1234
+
+Login state is persisted using SharedPreferences so the user remains logged in across app restarts.
+
+---
+
+## Testing
+
+Includes unit tests for:
+
+- TaskBloc event-to-state behavior
+- Repository online/offline logic
+
+Run tests using:
+
+```bash
+flutter test

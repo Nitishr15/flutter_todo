@@ -28,54 +28,77 @@ class TaskListView extends StatelessWidget {
               key: Key(task.id),
               onDismissed: (_) =>
                   context.read<TaskBloc>().add(DeleteTask(task.id)),
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                elevation: 0,
-                child: ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.blueGrey,
-                    child: Text(initial),
-                  ),
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        task.title,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
+              child: Stack(
+                children: [
+                  Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: 0,
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: Colors.blueGrey,
+                        child: Text(initial),
                       ),
-                      if (task.pendingSync)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 4),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 242, 194, 122),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: const Text(
-                              'Pending sync',
-                              style: TextStyle(
-                                color: Colors.orange,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                              ),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            task.title,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
-                        ),
-                    ],
+                          if (task.pendingSync)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: const Color.fromARGB(
+                                    255,
+                                    242,
+                                    194,
+                                    122,
+                                  ),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: const Text(
+                                  'Pending sync',
+                                  style: TextStyle(
+                                    color: Colors.orange,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                      onTap: () => context.read<TaskBloc>().add(
+                        UpdateTask(task.copyWith(completed: !task.completed)),
+                      ),
+                    ),
                   ),
-                  onTap: () => context.read<TaskBloc>().add(
-                    UpdateTask(task.copyWith(completed: !task.completed)),
+
+                  // Top-right status badge
+                  Positioned(
+                    top: 8,
+                    right: 12,
+                    child: Container(
+                      width: 10,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        color: task.completed ? Colors.green : Colors.orange,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           );

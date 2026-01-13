@@ -8,9 +8,13 @@ import '../widgets/task_list_view.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/constants/padding.dart';
 import '../widgets/add_task_bottom_sheet.dart';
+import 'login_page.dart';
+import '../../core/auth/auth_service.dart';
 
 class TaskPage extends StatelessWidget {
-  const TaskPage({super.key});
+  TaskPage({super.key});
+
+  final _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +29,30 @@ class TaskPage extends StatelessWidget {
           elevation: 0,
           title: const Text(AppStrings.appTitle),
           centerTitle: true,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: () async {
+                await _auth.logout();
+
+                if (!context.mounted) return;
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Logged out successfully'),
+                    duration: Duration(milliseconds: 200),
+                  ),
+                );
+
+                await Future.delayed(const Duration(milliseconds: 300));
+
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (_) => const LoginPage()),
+                  (route) => false,
+                );
+              },
+            ),
+          ],
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => showModalBottomSheet(

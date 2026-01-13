@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'task_page.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/constants/padding.dart';
+import '../../core/auth/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,15 +15,18 @@ class _LoginPageState extends State<LoginPage> {
   final _userCtrl = TextEditingController();
   final _passCtrl = TextEditingController();
   String? _error;
+  final _auth = AuthService();
 
-  void _login() {
+  void _login() async {
     if (_userCtrl.text == 'admin' && _passCtrl.text == '1234') {
+      await _auth.login();
+      if (!context.mounted) return;
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const TaskPage()),
+        MaterialPageRoute(builder: (_) => TaskPage()),
       );
     } else {
-      setState(() => _error = AppStrings.invalidCredentials);
+      setState(() => _error = 'Invalid credentials');
     }
   }
 

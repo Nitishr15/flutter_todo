@@ -14,6 +14,8 @@ import 'presentation/bloc/task_bloc.dart';
 import 'presentation/pages/login_page.dart';
 import 'presentation/bloc/task_event.dart';
 import 'core/network/connectivity_cubit.dart';
+import 'core/auth/auth_service.dart';
+import 'presentation/pages/task_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,9 +46,22 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => TaskBloc(repository)..add(LoadTasks())),
           BlocProvider(create: (_) => ConnectivityCubit(Connectivity())),
         ],
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: const LoginPage(),
+        child: FutureBuilder<bool>(
+          future: AuthService().isLoggedIn(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const MaterialApp(
+                home: Scaffold(
+                  body: Center(child: CircularProgressIndicator()),
+                ),
+              );
+            }
+
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              home: snapshot.data! ? TaskPage() : const LoginPage(),
+            );
+          },
         ),
       ),
     );
