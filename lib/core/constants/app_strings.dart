@@ -1,11 +1,14 @@
 class AppStrings {
   static const appTitle = 'My Tasks';
-  static const loginTitle = 'Login';
+  static const signIn = 'Sign In.';
+  static const login = 'Login';
   static const username = 'Username';
   static const password = 'Password';
   static const invalidCredentials = 'Invalid credentials';
+  static const logoutSuccess = 'Logged out successfully';
 
   static const addTask = 'Add Task';
+  static const taskHint = 'Enter task...';
   static const cancel = 'Cancel';
   static const add = 'Add';
   static const delete = 'Delete';

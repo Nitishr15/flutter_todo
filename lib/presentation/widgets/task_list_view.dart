@@ -4,6 +4,10 @@ import '../../domain/entities/task.dart';
 import '../bloc/task_bloc.dart';
 import '../bloc/task_event.dart';
 
+import '../../core/constants/app_strings.dart';
+import '../../core/constants/padding.dart';
+import '../../core/constants/sizing.dart';
+
 class TaskListView extends StatelessWidget {
   final List<Task> tasks;
 
@@ -14,7 +18,10 @@ class TaskListView extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: () async => context.read<TaskBloc>().add(LoadTasks()),
       child: ListView.builder(
-        padding: const EdgeInsets.only(bottom: 100, top: 8),
+        padding: const EdgeInsets.only(
+          bottom: AppPadding.p100,
+          top: AppPadding.p08,
+        ),
         itemCount: tasks.length,
         itemBuilder: (_, i) {
           final task = tasks[i];
@@ -23,7 +30,10 @@ class TaskListView extends StatelessWidget {
               : '?';
 
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppPadding.p12,
+              vertical: AppPadding.p06,
+            ),
             child: Dismissible(
               key: Key(task.id),
               onDismissed: (_) =>
@@ -32,7 +42,7 @@ class TaskListView extends StatelessWidget {
                 children: [
                   Card(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(AppSizing.s16),
                     ),
                     elevation: 0,
                     child: ListTile(
@@ -46,32 +56,31 @@ class TaskListView extends StatelessWidget {
                           Text(
                             task.title,
                             style: const TextStyle(
-                              fontSize: 16,
+                              fontSize: AppSizing.s16,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                           if (task.pendingSync)
                             Padding(
-                              padding: const EdgeInsets.only(top: 4),
+                              padding: const EdgeInsets.only(
+                                top: AppPadding.p04,
+                              ),
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 4,
+                                  horizontal: AppPadding.p12,
+                                  vertical: AppPadding.p04,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: const Color.fromARGB(
-                                    255,
-                                    242,
-                                    194,
-                                    122,
+                                  color: Colors.orange.withValues(alpha: 0.2),
+                                  borderRadius: BorderRadius.circular(
+                                    AppSizing.s20,
                                   ),
-                                  borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: const Text(
-                                  'Pending sync',
+                                  AppStrings.pendingSync,
                                   style: TextStyle(
                                     color: Colors.orange,
-                                    fontSize: 12,
+                                    fontSize: AppSizing.s12,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -87,11 +96,11 @@ class TaskListView extends StatelessWidget {
 
                   // Top-right status badge
                   Positioned(
-                    top: 8,
-                    right: 12,
+                    top: AppPadding.p08,
+                    right: AppPadding.p12,
                     child: Container(
-                      width: 10,
-                      height: 10,
+                      width: AppSizing.s10,
+                      height: AppSizing.s10,
                       decoration: BoxDecoration(
                         color: task.completed ? Colors.green : Colors.orange,
                         shape: BoxShape.circle,

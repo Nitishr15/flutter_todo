@@ -1,6 +1,6 @@
 # Flutter Todo App
 
-A Flutter Todo application demonstrating clean architecture, BLoC state management, offline-first behavior, and a modern dark UI inspired by Gmail.
+A Flutter Todo application demonstrating clean architecture, BLoC state management, offline-first behavior.
 
 ---
 
@@ -9,7 +9,7 @@ A Flutter Todo application demonstrating clean architecture, BLoC state manageme
 - Add, delete and toggle tasks
 - Offline support with optimistic updates
 - Automatic sync when internet is restored
-- Dark theme with rounded card UI
+- Rounded card UI
 - Leading avatar with task initial
 - Swipe to delete tasks
 - Status indicator badge for completed / pending tasks
@@ -65,7 +65,7 @@ Uses the public JSONPlaceholder API:
 - PATCH /todos/{id}
 - DELETE /todos/{id}
 
-Note: JSONPlaceholder does not persist writes. Local storage ensures continuity.
+Note: JSONPlaceholder does not persist writes.
 
 ---
 

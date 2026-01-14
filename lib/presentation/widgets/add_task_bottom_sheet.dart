@@ -3,6 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/task_bloc.dart';
 import '../bloc/task_event.dart';
 
+import '../../core/constants/app_strings.dart';
+import '../../core/constants/padding.dart';
+import '../../core/constants/sizing.dart';
+
 class AddTaskBottomSheet extends StatefulWidget {
   const AddTaskBottomSheet({super.key});
 
@@ -18,29 +22,34 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
     return Padding(
       padding: MediaQuery.of(context).viewInsets,
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppPadding.p16),
         decoration: const BoxDecoration(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(AppSizing.s24),
+          ),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Add Task',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              AppStrings.addTask,
+              style: TextStyle(
+                fontSize: AppSizing.s18,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSizing.s12),
             TextField(
               controller: _controller,
               autofocus: true,
               decoration: const InputDecoration(
-                hintText: 'Enter task...',
+                hintText: AppStrings.taskHint,
                 border: OutlineInputBorder(),
               ),
               onChanged: (_) => setState(() {}),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSizing.s12),
             Align(
               alignment: Alignment.centerRight,
               child: ElevatedButton(
@@ -52,7 +61,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                         );
                         Navigator.pop(context);
                       },
-                child: const Text('Add'),
+                child: const Text(AppStrings.add),
               ),
             ),
           ],

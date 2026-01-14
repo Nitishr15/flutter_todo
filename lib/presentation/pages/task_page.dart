@@ -7,6 +7,7 @@ import '../../core/network/connectivity_cubit.dart';
 import '../widgets/task_list_view.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/constants/padding.dart';
+import '../../core/constants/sizing.dart';
 import '../widgets/add_task_bottom_sheet.dart';
 import 'login_page.dart';
 import '../../core/auth/auth_service.dart';
@@ -18,6 +19,8 @@ class TaskPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final navigator = Navigator.of(context);
+
     return BlocListener<ConnectivityCubit, bool>(
       listener: (context, isOnline) {
         if (isOnline) {
@@ -39,14 +42,14 @@ class TaskPage extends StatelessWidget {
 
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Logged out successfully'),
+                    content: Text(AppStrings.logoutSuccess),
                     duration: Duration(milliseconds: 200),
                   ),
                 );
 
                 await Future.delayed(const Duration(milliseconds: 300));
 
-                Navigator.of(context).pushAndRemoveUntil(
+                navigator.pushAndRemoveUntil(
                   MaterialPageRoute(builder: (_) => const LoginPage()),
                   (route) => false,
                 );
@@ -59,17 +62,19 @@ class TaskPage extends StatelessWidget {
             context: context,
             isScrollControlled: true,
             shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(AppSizing.s24),
+              ),
             ),
             builder: (_) => const AddTaskBottomSheet(),
           ),
           icon: const Icon(Icons.edit),
-          label: const Text('Add Task'),
+          label: const Text(AppStrings.addTask),
         ),
         body: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(AppPadding.s12),
+              padding: const EdgeInsets.all(AppPadding.p12),
               child: TextField(
                 decoration: const InputDecoration(
                   prefixIcon: Icon(Icons.search),
