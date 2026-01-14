@@ -15,6 +15,12 @@ void main() {
 
   final task = Task(id: '1', title: 'Test', completed: false);
 
+  setUpAll(() {
+    registerFallbackValue(
+      const Task(id: 'fallback', title: 'fallback', completed: false),
+    );
+  });
+
   setUp(() {
     repo = MockTaskRepository();
     bloc = TaskBloc(repo);
@@ -43,5 +49,38 @@ void main() {
     expect: () => [
       TaskLoaded([task]),
     ],
+  );
+
+  blocTest<TaskBloc, TaskState>(
+    'updates task when UpdateTask is called',
+    build: () {
+      when(
+        () => repo.updateTask(any()),
+      ).thenAnswer((_) async => task.copyWith(completed: true));
+      return bloc;
+    },
+    act: (bloc) => bloc.add(UpdateTask(task)),
+    expect: () => [isA<TaskLoaded>()],
+  );
+
+  blocTest<TaskBloc, TaskState>(
+    'deletes task when DeleteTask is called',
+    build: () {
+      when(() => repo.deleteTask(any())).thenAnswer((_) async {});
+      return bloc;
+    },
+    act: (bloc) => bloc.add(DeleteTask(task.id)),
+    expect: () => [isA<TaskLoaded>()],
+  );
+
+  blocTest<TaskBloc, TaskState>(
+    'syncs and reloads tasks',
+    build: () {
+      when(() => repo.syncPendingTasks()).thenAnswer((_) async {});
+      when(() => repo.getTasks()).thenAnswer((_) async => []);
+      return bloc;
+    },
+    act: (bloc) => bloc.add(SyncTasks()),
+    expect: () => [isA<TaskLoaded>()],
   );
 }
